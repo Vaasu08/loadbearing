@@ -1,7 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { GlowBorderCard } from "@/components/vengeance/GlowBorderCard";
-import { SpotlightPanel } from "@/components/vengeance/SpotlightPanel";
+import { TerminalStack } from "@/components/vengeance/TerminalStack";
 import { VengeanceButton } from "@/components/vengeance/VengeanceButton";
 import { trpc } from "@/lib/trpc";
 import { AnimatePresence, motion } from "framer-motion";
@@ -170,47 +169,6 @@ function WaitlistForm({ compact = false }: { compact?: boolean }) {
   );
 }
 
-function TerminalPreview() {
-  return (
-    <SpotlightPanel className="terminal-spotlight">
-      <GlowBorderCard className="terminal-glow-card" glow="lime">
-        <motion.div
-          className="terminal-preview"
-          initial={{ opacity: 0, y: 28, rotate: 1.2 }}
-          animate={{ opacity: 1, y: 0, rotate: 0 }}
-          transition={{ duration: 0.8, delay: 0.22, ease: [0.23, 1, 0.32, 1] }}
-        >
-      <div className="terminal-preview__bar">
-        <div className="terminal-dots"><span /><span /><span /></div>
-        <span className="terminal-preview__path">src/main/java/com/acme/OrderService.java</span>
-        <span className="terminal-preview__status"><span className="status-dot" /> scanned</span>
-      </div>
-      <div className="terminal-preview__body">
-        <div className="code-column">
-          {["@Transactional", "public List<Order> getOrders() {", "  return orderRepo.findAll()", "    .stream()", "    .map(order -> hydrate(order))", "    .toList();", "}"].map((line, index) => (
-            <div className={index === 4 ? "code-line code-line--alert" : "code-line"} key={line}>
-              <span>{String(index + 42).padStart(2, "0")}</span><code>{line}</code>
-              {index === 4 && <span className="inline-warning">N+1</span>}
-            </div>
-          ))}
-        </div>
-        <div className="scan-card">
-          <div className="scan-card__eyebrow"><span className="scan-card__pulse" /> ScaleGuard report</div>
-          <div className="scan-card__title">1 high-impact finding</div>
-          <div className="scan-card__finding">
-            <div className="finding-icon"><Zap size={15} /></div>
-            <div><strong>N+1 query path</strong><span>OrderService.java:46</span></div>
-          </div>
-          <div className="scan-card__fix"><span>Fix suggestion</span><code>JOIN FETCH customer</code></div>
-          <div className="scan-card__footer"><span>confidence 98%</span><span>local analysis</span></div>
-        </div>
-      </div>
-      <div className="terminal-preview__footer"><span><CircleDot size={11} /> main* </span><span>Spring Boot / Java</span><span>UTF-8</span></div>
-        </motion.div>
-      </GlowBorderCard>
-    </SpotlightPanel>
-  );
-}
 
 export default function Home() {
   const countQuery = trpc.waitlist.count.useQuery(undefined, { staleTime: 30_000 });
@@ -302,7 +260,7 @@ export default function Home() {
               </div>
             </Reveal>
           </div>
-          <div className="hero-visual"><TerminalPreview /><div className="hero-visual__glow" /><div className="hero-visual__grid" /></div>
+          <div className="hero-visual"><TerminalStack /><div className="hero-visual__glow" /><div className="hero-visual__grid" /></div>
         </div>
         <div className="scroll-cue"><span>scroll to inspect</span><ChevronDown size={14} /></div>
       </section>
